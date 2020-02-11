@@ -6,13 +6,13 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/23 12:42:44 by mfrias            #+#    #+#             */
-/*   Updated: 2019/12/14 14:19:05 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/10 16:15:27 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void	print_out(char *out, t_flag *flags)
+void		print_out(char *out, t_flag *flags)
 {
 	int	fd;
 
@@ -28,7 +28,25 @@ void	print_out(char *out, t_flag *flags)
 	close(fd);
 }
 
-void	base64(t_flag *flags)
+static char	*remove_whitespaces(char *str)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while ((size_t) ++i < ft_strlen(str))
+	{
+		if (str[i] == ' ')
+		{
+			j = i - 1;
+			while (str[++j] != '\0')
+				str[j] = str[j + 1];
+		}
+	}
+	return (str);
+}
+
+void		base64(t_flag *flags)
 {
 	char	*line;
 	char	*out;
@@ -45,7 +63,7 @@ void	base64(t_flag *flags)
 	line = read_file(fd);
 	close(fd);
 	if (flags->d && !flags->e)
-		out = decode(line, ft_strlen(line), 0);
+		out = decode(remove_whitespaces(line), ft_strlen(line) - 1, 0);
 	else
 		out = encode(line, ft_strlen(line));
 	print_out(out, flags);

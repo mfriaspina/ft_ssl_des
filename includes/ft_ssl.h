@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:26:37 by mfrias            #+#    #+#             */
-/*   Updated: 2019/12/14 14:23:46 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/10 16:28:29 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ char			*decode(char *line, size_t len, size_t i);
 void			base64(t_flag *flags);
 
 
+char			*encode_des(char *line, size_t in_len);
+char			*decode_des(char *line, size_t len, size_t i);
 void			des(t_flag *flags);
 
 #endif
