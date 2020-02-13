@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/23 12:42:44 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/10 16:15:27 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/13 14:41:28 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static char	*remove_whitespaces(char *str)
 	int	j;
 
 	i = -1;
-	while ((size_t) ++i < ft_strlen(str))
+	while ((size_t)++i < ft_strlen(str))
 	{
 		if (str[i] == ' ')
 		{

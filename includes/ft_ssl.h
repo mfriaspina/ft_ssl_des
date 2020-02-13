@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:26:37 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/10 16:28:29 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/13 14:34:15 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 typedef struct	s_flag
 {
+	char		update;
 	char		p;
 	char		q;
 	char		r;
@@ -28,10 +29,12 @@ typedef struct	s_flag
 	char		a;
 	char		e;
 	char		d;
-	char		k;
-	char		v;
+	char		*k;
+	char		*v;
 	char		*in;
 	char		*out;
+	char		*pass;
+	char		*salt;
 }				t_flag;
 
 typedef struct	s_fun
@@ -40,6 +43,7 @@ typedef struct	s_fun
 	void		(*f)();
 }				t_fun;
 
+t_flag			get_flags(char **argv, int *i);
 void			flag_error(char *name, char *flags);
 char			*read_file(int fd);
 
@@ -59,9 +63,7 @@ char			*encode(char *line, size_t in_len);
 char			*decode(char *line, size_t len, size_t i);
 void			base64(t_flag *flags);
 
-
-char			*encode_des(char *line, size_t in_len);
-char			*decode_des(char *line, size_t len, size_t i);
+char			*get_key(void);
 void			des(t_flag *flags);
 
 #endif
