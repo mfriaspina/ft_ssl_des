@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 20:41:10 by mfrias            #+#    #+#             */
-/*   Updated: 2019/09/26 21:12:33 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/15 14:58:43 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ uint32_t	*get_w(uint32_t *msg, int i)
 	j = 16;
 	while (j < 64)
 	{
-		s[0] = (RIGHTROTATE(w[j - 15], 7)) ^ (RIGHTROTATE(w[j - 15], 18))
+		s[0] = (rightrotate(w[j - 15], 7)) ^ (rightrotate(w[j - 15], 18))
 			^ (w[j - 15] >> 3);
-		s[1] = (RIGHTROTATE(w[j - 2], 17)) ^ (RIGHTROTATE(w[j - 2], 19))
+		s[1] = (rightrotate(w[j - 2], 17)) ^ (rightrotate(w[j - 2], 19))
 			^ (w[j - 2] >> 10);
 		w[j] = w[j - 16] + s[0] + w[j - 7] + s[1];
 		j++;

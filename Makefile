@@ -6,7 +6,7 @@
 #    By: mfrias <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/11 15:15:02 by mfrias            #+#    #+#              #
-#    Updated: 2019/09/24 13:24:36 by mfrias           ###   ########.fr        #
+#    Updated: 2020/02/14 12:59:17 by mfrias           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,6 @@ clean:
 fclean: clean
 	rm -f $(NAME_A)
 	rm -f $(NAME)
-	rm -f filler.trace
 	make -C $(SUBDIR) fclean
 	echo "FULL CLEANED"
 

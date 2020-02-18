@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 20:11:51 by mfrias            #+#    #+#             */
-/*   Updated: 2019/09/29 11:39:04 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/15 14:59:23 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static uint32_t			*each_offset(uint32_t *w, uint32_t *o)
 		val[4] = val[4] + val[0] + g_k_table[i] + w[val[5]];
 		val[3] = val[2];
 		val[2] = val[1];
-		val[1] = val[1] + LEFTROTATE(val[4], g_s_table[i]);
+		val[1] = val[1] + leftrotate(val[4], g_s_table[i]);
 		val[0] = temp;
 	}
 	o[0] += val[0];

@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 20:11:51 by mfrias            #+#    #+#             */
-/*   Updated: 2019/09/29 11:39:04 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/15 14:59:41 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ static void		loop(uint32_t *val, uint32_t *w, int i)
 	uint32_t	temp[2];
 	uint32_t	maj;
 
-	s[1] = (RIGHTROTATE(val[4], 6)) ^ (RIGHTROTATE(val[4], 11))
-		^ (RIGHTROTATE(val[4], 25));
+	s[1] = (rightrotate(val[4], 6)) ^ (rightrotate(val[4], 11))
+		^ (rightrotate(val[4], 25));
 	ch = (val[4] & val[5]) ^ ((~val[4]) & val[6]);
 	temp[0] = val[7] + s[1] + ch + g_k_table[i] + w[i];
-	s[0] = (RIGHTROTATE(val[0], 2)) ^ (RIGHTROTATE(val[0], 13))
-		^ (RIGHTROTATE(val[0], 22));
+	s[0] = (rightrotate(val[0], 2)) ^ (rightrotate(val[0], 13))
+		^ (rightrotate(val[0], 22));
 	maj = (val[0] & val[1]) ^ (val[0] & val[2]) ^ (val[1] & val[2]);
 	temp[1] = s[0] + maj;
 	val[7] = val[6];

@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/23 12:42:44 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/13 14:41:28 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/18 08:53:10 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void		print_out(char *out, t_flag *flags)
 		fd = open(flags->out, O_WRONLY);
 	}
 	ft_putendl_fd(out, fd);
-	close(fd);
+	if (fd != 1)
+		close(fd);
 }
 
 static char	*remove_whitespaces(char *str)
