@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:27:28 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/18 08:53:13 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/19 14:19:29 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,5 @@ int		main(int argc, char **argv)
 		base64(&flag);
 	else if (!ft_strcmp(argv[1], "des"))
 		des(&flag);
-	return (1);
+	return (EXIT_SUCCESS);
 }

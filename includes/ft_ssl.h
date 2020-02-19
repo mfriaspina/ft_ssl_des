@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:26:37 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/18 11:33:34 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/18 15:41:01 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct			s_flag
 	char				*out;
 	char				*pass;
 	char				*salt;
+	char				print;
 }						t_flag;
 
 typedef struct			s_fun
@@ -97,6 +98,8 @@ void					process_message(const t_ubyte *message, t_subkey ks,
 
 t_ubyte					*char_to_ubyte(char *str);
 t_ubyte					*get_key(t_flag *flags);
+
+t_ubyte					*get_salt(t_flag *flags);
 
 t_string				des_encrypt(t_ubyte *key, t_ubyte *message, int len);
 t_string				des_decrypt(t_ubyte *key, t_ubyte *message, int len);

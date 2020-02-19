@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/13 17:54:16 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/13 14:10:42 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/18 15:43:43 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	des_e(char *f)
 	while (f[++i])
 		if (f[i] != 'e' && f[i] != 'd' && f[i] != 'i' && f[i] != 'o' &&
 			f[i] != 'a' && f[i] != 'k' && f[i] != 'p' && f[i] != 's' &&
-			f[i] != 'v')
+			f[i] != 'v' && f[i] != 'P')
 			break ;
 	if (!f[i])
 		return (0);
@@ -54,7 +54,8 @@ static int	des_e(char *f)
 	ft_printf("-k, key in hex is the next arguement\n");
 	ft_printf("-p, password in ascii is the next argument\n");
 	ft_printf("-s, the salt in hex is the next argument\n");
-	ft_printf("-v, initialization vector in hex is the next argument.\n");
+	ft_printf("-v, initialization vector in hex is the next argument\n");
+	ft_printf("-P, Print out the salt, key and IV used\n");
 	return (1);
 }
 

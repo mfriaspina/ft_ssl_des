@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 13:09:45 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/13 15:17:07 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/18 15:42:14 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void	des_flags(t_flag *op, char **argv, int *i)
 	if (ft_strchr(argv[*i], 'p') || ft_strchr(argv[*i], 'v') ||
 		ft_strchr(argv[*i], 'k') || ft_strchr(argv[*i], 's'))
 		op->update = 1;
+	op->print = !op->print && !ft_strchr(argv[*i], 'P') ? 0 : 1;
 }
 
 static void	start_flags(t_flag *op, char **argv, int *i)
@@ -53,7 +54,7 @@ t_flag		get_flags(char **argv, int *i)
 {
 	t_flag	op;
 
-	op = (t_flag) {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL};
+	op = (t_flag) {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, 0};
 	while (argv[*i] && argv[*i][0] == '-')
 	{
 		op.update = 0;

@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 14:23:56 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/18 11:42:26 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/18 15:30:44 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,34 @@ void		print_des(t_flag *flags, t_string enc)
 		free(enc.data);
 }
 
-void		des(t_flag *flags)
+char		*read_des(t_flag *flags)
 {
 	char		*in;
 	int			fd;
-	t_ubyte		*key;
-	t_string	enc;
 
-	if (!(key = get_key(flags)))
-	{
-		ft_printf("ft_ssl: des: Invalid key\n");
-		return ;
-	}
 	fd = 0;
 	if (flags->in)
 		fd = open(flags->in, O_RDONLY);
 	if (fd < 0)
 	{
 		ft_printf("ft_ssl: des: %s: No such file or directory\n", flags->in);
-		return ;
+		return (NULL);
 	}
 	in = read_file(fd);
 	close(fd);
+	return (in);
+}
+
+void		des(t_flag *flags)
+{
+	char		*in;
+	t_ubyte		*key;
+	t_string	enc;
+
+	if (!(key = get_key(flags)))
+		return ;
+	if (!(in = read_des(flags)))
+		return ;
 	if (flags->d && !flags->e)
 		enc = des_decrypt(key, (t_ubyte *)in, ft_strlen(in));
 	else
