@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 13:46:19 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/19 14:30:43 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/20 12:23:13 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,18 @@ t_ubyte	*char_to_ubyte(char *str)
 
 	i = 0;
 	j = 0;
-	key = NULL;
 	key = (t_ubyte *)ft_strnew(8);
 	while (i < ft_strlen(str) && j < 8)
 	{
 		temp = ft_strnew(2);
 		ft_strncpy(temp, &str[i], 2);
+		if (!is_hex(temp))
+		{
+			ft_strdel(&temp);
+			free(key);
+			free(str);
+			return (NULL);
+		}
 		key[j++] = ft_strtol(temp);
 		ft_strdel(&temp);
 		i += 2;
@@ -74,14 +80,13 @@ t_ubyte	*salted_key(t_flag *flags, t_ubyte *salt)
 		str = ft_strdup(getpass("enter des-ecb encryption password:"));
 		conf = getpass("Verifying - enter des-ecb encryption password:");
 		if (ft_strcmp(str, conf))
-		{
-			ft_printf("Verify failure\nbad password read\n");
-			free(salt);
-			exit(EXIT_FAILURE);
-		}
+			free_exit("Verify failure\nbad password read\n", salt);
 		conf = NULL;
 	}
-	key = char_to_ubyte(str);
+	if (flags->pass)
+		key = (t_ubyte *)str;
+	if (!(key = char_to_ubyte(str)))
+		free_exit("non-hex digit\ninvalid hex key value\n", salt);
 	free(str);
 	return (key);
 }

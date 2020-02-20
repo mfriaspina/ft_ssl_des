@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:26:37 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/18 15:41:01 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/20 12:22:34 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,9 @@ void					f(t_ubyte *r, t_ubyte *ks, t_ubyte *sp);
 void					get_sub_keys(const t_ubyte *key, t_subkey ks);
 void					process_message(const t_ubyte *message, t_subkey ks,
 						t_ubyte *ep);
+
+int						is_hex(char *str);
+void					free_exit(char *str, void *to_free);
 
 t_ubyte					*char_to_ubyte(char *str);
 t_ubyte					*get_key(t_flag *flags);

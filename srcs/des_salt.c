@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 15:19:55 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/19 12:52:42 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/20 12:58:41 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,16 @@ char	*get_random(int size)
 t_ubyte	*get_salt(t_flag *flags)
 {
 	t_ubyte	*salt;
+	char	*temp;
 
+	temp = ft_strdup(flags->salt);
 	if (flags->salt)
-		salt = char_to_ubyte(flags->salt);
+	{
+		if (!(salt = char_to_ubyte(temp)))
+			free_exit("non-hex digit\ninvalid hex salt value\n", NULL);
+	}
 	else
 		salt = (t_ubyte *)get_random(8);
+	free(temp);
 	return (salt);
 }
