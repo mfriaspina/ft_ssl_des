@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 14:23:56 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/19 18:41:37 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/20 18:43:20 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		print_des(t_flag *flags, t_string enc)
 	if (flags->a)
 		ft_putendl_fd(encode(str, ft_strlen(str)), fd);
 	else
-		ft_putendl_fd(str, fd);
+		ft_putstr_fd(str, fd);
 	if (fd != 1)
 		close(fd);
 	if (enc.len > 0)

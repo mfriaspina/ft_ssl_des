@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:26:37 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/20 12:22:34 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/22 18:05:25 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../libft/libft.h"
 # include <fcntl.h>
 # define KEY_LEN 8
+# define PBKDF_IT 1
 
 typedef struct			s_flag
 {
@@ -69,6 +70,8 @@ void					flag_error(char *name, char *flags);
 char					*read_file(int fd);
 
 void					md5(char *old_msg, size_t initial_len);
+char					*execute_md5(char *old_msg, size_t initial_len,
+						size_t offset, size_t new_len);
 
 void					sha256(char *old_msg, size_t initial_len);
 
@@ -102,7 +105,10 @@ void					free_exit(char *str, void *to_free);
 t_ubyte					*char_to_ubyte(char *str);
 t_ubyte					*get_key(t_flag *flags);
 
+t_ubyte					*pbkdf2(char *pass, t_ubyte *salt);
+
 t_ubyte					*get_salt(t_flag *flags);
+t_ubyte					*get_iv(t_flag *flags);
 
 t_string				des_encrypt(t_ubyte *key, t_ubyte *message, int len);
 t_string				des_decrypt(t_ubyte *key, t_ubyte *message, int len);

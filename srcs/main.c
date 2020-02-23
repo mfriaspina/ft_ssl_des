@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:27:28 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/19 14:19:29 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/22 19:24:50 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,10 @@ int		main(int argc, char **argv)
 	else if (!ft_strcmp(argv[1], "base64"))
 		base64(&flag);
 	else if (!ft_strcmp(argv[1], "des"))
+		des(&flag);
+	else if (!ft_strcmp(argv[1], "des-ecb"))
+		des(&flag);
+	else if (!ft_strcmp(argv[1], "des-cbc"))
 		des(&flag);
 	return (EXIT_SUCCESS);
 }

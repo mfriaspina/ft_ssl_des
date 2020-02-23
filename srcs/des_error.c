@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/20 12:14:36 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/20 12:50:55 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/21 12:09:57 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 int		is_hex(char *str)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	if (str[0] >= 'a' && str[0] <= 'f')
-		i = 1;
-	if (str[0] >= 'A' && str[0] <= 'F')
-		i = 1;
-	if (str[1] >= 'a' && str[1] <= 'f')
-		i = 1;
-	if (str[1] >= 'A' && str[1] <= 'F')
-		i = 1;
-	if (str[0] != 0 && !ft_isdigit(str[0]) && !i)
-		return (0);
-	if (str[1] != 0 && !ft_isdigit(str[1]) && !i)
-		return (0);
+	j = 0;
+	while (str[j])
+	{
+		if (str[j] >= 'a' && str[j] <= 'f')
+			i = 1;
+		if (str[j] >= 'A' && str[j] <= 'F')
+			i = 1;
+		if (str[j] != 0 && !ft_isdigit(str[j]) && !i)
+			return (0);
+		j++;
+	}
 	return (1);
 }
 

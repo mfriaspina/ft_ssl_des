@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/24 20:11:51 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/15 14:59:23 by mfrias           ###   ########.fr       */
+/*   Created: 2020/02/21 18:31:50 by mfrias            #+#    #+#             */
+/*   Updated: 2020/02/22 19:23:46 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,4 +116,34 @@ void					md5(char *old_msg, size_t initial_len)
 	}
 	print(h);
 	ft_strdel(&msg);
+}
+
+char					*execute_md5(char *old_msg, size_t initial_len,
+						size_t offset, size_t new_len)
+{
+	char		*msg;
+	uint32_t	*h;
+	char		*temp;
+	char		*o;
+
+	o = ft_strnew(16);
+	msg = padding(old_msg, initial_len, &new_len);
+	h = (uint32_t[4]) {g_h_table[0], g_h_table[1], g_h_table[2], g_h_table[3]};
+	while (offset < new_len)
+	{
+		h = each_offset((uint32_t *)(msg + offset), h);
+		offset += 64;
+	}
+	new_len = 0;
+	while (new_len < 16)
+	{
+		temp = ft_itoa_base(((uint8_t *)&h[new_len / 4])[new_len % 4], 16);
+		while (ft_strlen(temp) < 2)
+			temp = free_strjoin("0", temp, 1);
+		o = ft_strcat(o, temp);
+		ft_strdel(&temp);
+		new_len++;
+	}
+	ft_strdel(&msg);
+	return (o);
 }
