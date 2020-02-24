@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 13:46:19 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/22 18:31:20 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/23 18:17:32 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_ubyte	*char_to_ubyte(char *str)
 	return (key);
 }
 
-t_ubyte	*salted_key(t_flag *flags, t_ubyte *salt)
+t_ubyte	*salted_key(t_flag *flags, char *salt, char **iv)
 {
 	t_ubyte	*key;
 	char	*str;
@@ -81,13 +81,13 @@ t_ubyte	*salted_key(t_flag *flags, t_ubyte *salt)
 		conf = getpass("Verifying - enter des-ecb encryption password:");
 		if (ft_strcmp(str, conf))
 		{
-			free(str);
-			free_exit("Verify failure\nbad password read\n", salt);
+			free(salt);
+			free_exit("Verify failure\nbad password read\n", str);
 		}
 		conf = NULL;
 	}
 	if (!flags->k)
-		key = pbkdf2(str, salt);
+		key = pbkdf2(str, hex_str_to_64bit_le(salt), iv);
 	else if (!(key = char_to_ubyte(str)))
 		free_exit("non-hex digit\ninvalid hex key value\n", salt);
 	return (key);
@@ -96,19 +96,19 @@ t_ubyte	*salted_key(t_flag *flags, t_ubyte *salt)
 t_ubyte	*get_key(t_flag *flags)
 {
 	t_ubyte	*key;
-	t_ubyte	*salt;
-	t_ubyte	*iv;
+	char	*salt;
+	char	*iv;
 	char	buffer[128];
 
 	salt = get_salt(flags);
 	iv = get_iv(flags);
-	key = salted_key(flags, salt);
+	key = salted_key(flags, salt, &iv);
 	if (flags->print)
 	{
-		print_bytes(salt, 8, buffer);
-		ft_printf("salt=%s\n", buffer);
+		ft_printf("salt=%s\n", salt);
 		print_bytes(key, 8, buffer);
 		ft_printf("key=%s\n", buffer);
+		ft_printf("iv=%s\n", iv);
 	}
 	free(salt);
 	free(iv);

@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:26:37 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/22 18:05:25 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/23 18:16:55 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ typedef struct			s_string
 	int					len;
 }						t_string;
 
-int						leftrotate(int x, int c);
-int						rightrotate(int x, int c);
+int						leftrotate(unsigned int x, int n);
+int						rightrotate(unsigned int x, int n);
 int						xor(int x, int c);
 
 t_flag					get_flags(char **argv, int *i);
@@ -105,10 +105,11 @@ void					free_exit(char *str, void *to_free);
 t_ubyte					*char_to_ubyte(char *str);
 t_ubyte					*get_key(t_flag *flags);
 
-t_ubyte					*pbkdf2(char *pass, t_ubyte *salt);
+t_ubyte					*pbkdf2(char *pass, uint64_t salt, char **iv);
 
-t_ubyte					*get_salt(t_flag *flags);
-t_ubyte					*get_iv(t_flag *flags);
+uint64_t				hex_str_to_64bit_le(char *s);
+char					*get_salt(t_flag *flags);
+char					*get_iv(t_flag *flags);
 
 t_string				des_encrypt(t_ubyte *key, t_ubyte *message, int len);
 t_string				des_decrypt(t_ubyte *key, t_ubyte *message, int len);

@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 14:23:56 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/20 18:43:20 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/23 18:43:27 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void		print_des(t_flag *flags, t_string enc)
 {
 	int		fd;
 	char	*str;
+	char	*out;
 
 	fd = 1;
 	if (flags->out)
@@ -27,7 +28,11 @@ void		print_des(t_flag *flags, t_string enc)
 	}
 	str = (char *)enc.data;
 	if (flags->a)
-		ft_putendl_fd(encode(str, ft_strlen(str)), fd);
+	{
+		out = encode(str, ft_strlen(str));
+		ft_putendl_fd(out, fd);
+		free(out);
+	}
 	else
 		ft_putstr_fd(str, fd);
 	if (fd != 1)
