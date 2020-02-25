@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/15 13:40:24 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/18 11:35:47 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/24 13:31:26 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ const static t_ubyte g_ip2[] = {
 	60, 28, 35, 3, 43, 11, 51, 19, 59, 27, 34, 2, 42, 10, 50, 18, 58, 26, 33,
 	1, 41, 9, 49, 17, 57, 25};
 
-void		message_cycle(t_des *des, int i, t_subkey ks)
+void		message_cycle(t_des_algo *des, int i, t_subkey ks)
 {
 	t_ubyte fs[4];
 	int		j;
@@ -39,8 +39,8 @@ void		message_cycle(t_des *des, int i, t_subkey ks)
 
 void		process_message(const t_ubyte *message, t_subkey ks, t_ubyte *ep)
 {
-	t_des	des;
-	int		i;
+	t_des_algo	des;
+	int			i;
 
 	i = -1;
 	while (++i < 64)

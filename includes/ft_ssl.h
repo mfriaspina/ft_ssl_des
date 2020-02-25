@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:26:37 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/23 18:16:55 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/24 12:59:58 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "../libft/libft.h"
 # include <fcntl.h>
 # define KEY_LEN 8
-# define PBKDF_IT 1
 
 typedef struct			s_flag
 {
@@ -49,11 +48,20 @@ typedef t_ubyte			t_subkey[17][6];
 
 typedef struct			s_des
 {
+	t_ubyte				*key;
+	char				*salt;
+	char				*iv;
+	char				*str;
+	int					len;
+}						t_des;
+
+typedef struct			s_des_algo
+{
 	t_ubyte				left[17][4];
 	t_ubyte				right[17][4];
 	t_ubyte				mp[8];
 	t_ubyte				e[8];
-}						t_des;
+}						t_des_algo;
 
 typedef struct			s_string
 {
@@ -100,12 +108,13 @@ void					process_message(const t_ubyte *message, t_subkey ks,
 						t_ubyte *ep);
 
 int						is_hex(char *str);
-void					free_exit(char *str, void *to_free);
+void					free_exit(char *str, t_des *des);
+void					check_free(t_des *des);
 
 t_ubyte					*char_to_ubyte(char *str);
-t_ubyte					*get_key(t_flag *flags);
+t_des					*get_key(t_flag *flags);
 
-t_ubyte					*pbkdf2(char *pass, uint64_t salt, char **iv);
+void					pbkdf2(t_des *des, uint64_t salt);
 
 uint64_t				hex_str_to_64bit_le(char *s);
 char					*get_salt(t_flag *flags);

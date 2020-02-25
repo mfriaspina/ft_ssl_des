@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:27:28 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/23 17:44:18 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/24 13:30:39 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,5 @@ int		main(int argc, char **argv)
 		des(&flag);
 	else if (!ft_strcmp(argv[1], "des-cbc"))
 		des(&flag);
-	system("leaks ft_ssl");
 	return (EXIT_SUCCESS);
 }

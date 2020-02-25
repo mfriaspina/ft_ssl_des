@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/20 12:14:36 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/21 12:09:57 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/24 12:59:30 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,24 @@ int		is_hex(char *str)
 	return (1);
 }
 
-void	free_exit(char *str, void *to_free)
+void	check_free(t_des *des)
 {
-	ft_putstr(str);
-	if (to_free)
-		free(to_free);
+	if (des->key)
+		free(des->key);
+	if (des->salt)
+		free(des->salt);
+	if (des->iv)
+		free(des->iv);
+	if (des->str)
+		free(des->str);
+	free(des);
+}
+
+void	free_exit(char *str, t_des *des)
+{
+	if (str)
+		ft_putstr(str);
+	if (des)
+		check_free(des);
 	exit(EXIT_FAILURE);
 }
