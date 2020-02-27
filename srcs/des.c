@@ -6,17 +6,19 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 14:23:56 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/25 11:00:26 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/26 19:08:21 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
 /*
-** TODO = Decrypt from key in b64, Decrypt with password
+** TODO
+** 2) Des-cbc
+** 3) Des
 */
 
-char		*enc_out(t_flag *flags, t_des *des, t_string *enc)
+char		*enc_out(t_flag *flags, t_des *des, t_string *enc, int i)
 {
 	char		*str;
 	char		*salted;
@@ -33,6 +35,13 @@ char		*enc_out(t_flag *flags, t_des *des, t_string *enc)
 		free(str);
 		enc->len += 16;
 		return (salted);
+	}
+	if (flags->d && flags->a)
+	{
+		while (str[++i])
+			if (str[i] == '\n')
+				str[i + 1] = '\0';
+		enc->len = i;
 	}
 	return (str);
 }
@@ -51,15 +60,15 @@ void		print_des(t_flag *flags, t_des *des, t_string enc)
 		fd = open(flags->out, O_CREAT);
 		fd = open(flags->out, O_WRONLY);
 	}
-	str = enc_out(flags, des, &enc);
-	if (flags->a)
+	str = enc_out(flags, des, &enc, -1);
+	if (flags->a && !flags->d)
 	{
 		out = encode(str, enc.len);
 		ft_putendl_fd(out, fd);
 		free(out);
 	}
 	else
-		ft_putstr_fd(str, fd);
+		write(fd, str, enc.len);
 	if (fd != 1)
 		close(fd);
 	free(enc.data);
@@ -69,6 +78,7 @@ void		print_des(t_flag *flags, t_des *des, t_string enc)
 char		*read_des(t_flag *flags)
 {
 	char		*in;
+	char		*temp;
 	int			fd;
 
 	fd = 0;
@@ -79,7 +89,15 @@ char		*read_des(t_flag *flags)
 		ft_printf("ft_ssl: des: %s: No such file or directory\n", flags->in);
 		return (NULL);
 	}
-	in = read_file(fd);
+	if (flags->a && flags->d)
+	{
+		get_next_line(fd, &in);
+		temp = decode(in, ft_strlen(in));
+		free(in);
+		in = temp;
+	}
+	else
+		in = read_file(fd);
 	close(fd);
 	return (in);
 }
@@ -90,22 +108,18 @@ void		des(t_flag *flags)
 	t_des		*des;
 	t_string	enc;
 
-	if (!(des = get_key(flags)))
-	{
-		check_free(des);
-		return ;
-	}
 	if (!(in = read_des(flags)))
-	{
-		free(in);
-		check_free(des);
 		return ;
-	}
+	des = get_key(flags, in);
+	if (flags->d && !flags->k)
+		in += 16;
 	if (flags->d && !flags->e)
 		enc = des_decrypt(des->key, (t_ubyte *)in, ft_strlen(in));
 	else
 		enc = des_encrypt(des->key, (t_ubyte *)in, ft_strlen(in));
 	print_des(flags, des, enc);
+	if (flags->d && !flags->k)
+		in -= 16;
 	free(in);
 	check_free(des);
 }

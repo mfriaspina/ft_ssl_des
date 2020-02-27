@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 13:46:19 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/24 13:37:50 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/26 18:59:02 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,33 @@ t_ubyte	*char_to_ubyte(char *str)
 	return (key);
 }
 
+void	pass_salted_key(t_flag *flags, t_des *des, char *in)
+{
+	if (ft_strncmp(in, "Salted__", 8))
+	{
+		free(in);
+		free_exit("bad magic number\n", des);
+	}
+	free(des->salt);
+	des->salt = ft_strnew(9);
+	print_bytes((t_ubyte *)&in[8], 8, des->salt);
+	if (flags->pass)
+		des->str = ft_strdup(flags->pass);
+	else
+		des->str = ft_strdup(getpass("enter des-ecb decryption password:"));
+	pbkdf2(des, hex_str_to_64bit_le(des->salt));
+}
+
 void	salted_key(t_flag *flags, t_des *des)
 {
-	t_ubyte	*key;
 	char	*conf;
 
 	if (flags->k)
 	{
 		conf = ft_strdup(flags->k);
-		if (!(key = char_to_ubyte(conf)))
+		if (!(des->key = char_to_ubyte(conf)))
 			free_exit("non-hex digit\ninvalid hex key value\n", des);
 		free(conf);
-		des->key = key;
 		return ;
 	}
 	else if (flags->pass)
@@ -84,17 +99,15 @@ void	salted_key(t_flag *flags, t_des *des)
 	else
 	{
 		des->str = ft_strdup(getpass("enter des-ecb encryption password:"));
-		conf = getpass("Verifying - enter des-ecb encryption password:");
+		conf = getpass("verifying - enter des-ecb encryption password:");
 		if (ft_strcmp(des->str, conf))
-		{
-			free_exit("Verify failure\nbad password read\n", des);
-		}
+			free_exit("verify failure\nbad password read\n", des);
 		conf = NULL;
 	}
 	pbkdf2(des, hex_str_to_64bit_le(des->salt));
 }
 
-t_des	*get_key(t_flag *flags)
+t_des	*get_key(t_flag *flags, char *in)
 {
 	t_des	*des;
 	char	buffer[128];
@@ -102,16 +115,13 @@ t_des	*get_key(t_flag *flags)
 	des = (t_des *)ft_memalloc(sizeof(t_des));
 	des->salt = get_salt(flags);
 	des->iv = get_iv(flags);
-	salted_key(flags, des);
+	if (flags->d && !flags->k)
+		pass_salted_key(flags, des, in);
+	else
+		salted_key(flags, des);
 	if (flags->print)
 	{
-		if (flags->salt)
-			ft_printf("salt=%s\n", des->salt);
-		else
-		{
-			print_bytes((t_ubyte *)des->salt, 8, buffer);
-			ft_printf("salt=%s\n", buffer);
-		}
+		ft_printf("salt=%s\n", des->salt);
 		print_bytes(des->key, 8, buffer);
 		ft_printf("key=%s\n", buffer);
 		ft_printf("iv=%s\n", des->iv);

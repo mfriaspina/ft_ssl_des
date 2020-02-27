@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 15:19:55 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/23 18:39:32 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/25 13:47:07 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ char		*get_random(int size)
 char		*get_salt(t_flag *flags)
 {
 	char	*salt;
+	char	buffer[128];
 
 	if (flags->salt)
 	{
@@ -71,9 +72,12 @@ char		*get_salt(t_flag *flags)
 			salt[16] = '\0';
 		while (ft_strlen(salt) < 16)
 			salt = free_strjoin(salt, "0", 0);
+		return (salt);
 	}
-	else
-		salt = get_random(8);
+	salt = get_random(8);
+	print_bytes((t_ubyte *)salt, 8, buffer);
+	free(salt);
+	salt = ft_strdup(buffer);
 	return (salt);
 }
 

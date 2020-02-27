@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:26:37 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/24 12:59:58 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/26 17:45:23 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,20 @@ typedef struct			s_fun
 	char				*name;
 	void				(*f)();
 }						t_fun;
+
+typedef struct			s_base64
+{
+	size_t				i;
+	size_t				j;
+	size_t				k;
+	uint64_t			res_a;
+	uint64_t			res_b;
+	uint64_t			res_c;
+	uint64_t			res_d;
+	uint64_t			res_e;
+	int					input_len;
+	int					output_len;
+}						t_base64;
 
 typedef	unsigned char	t_ubyte;
 typedef t_ubyte			t_subkey[17][6];
@@ -92,7 +106,7 @@ uint32_t				*get_w(uint32_t *msg, int i);
 uint32_t				sha_rev(uint32_t n);
 
 char					*encode(char *line, size_t in_len);
-char					*decode(char *line, size_t len, size_t i);
+char					*decode(char *input, size_t in_len);
 void					base64(t_flag *flags);
 
 char					to_hex(t_ubyte in);
@@ -112,7 +126,7 @@ void					free_exit(char *str, t_des *des);
 void					check_free(t_des *des);
 
 t_ubyte					*char_to_ubyte(char *str);
-t_des					*get_key(t_flag *flags);
+t_des					*get_key(t_flag *flags, char *in);
 
 void					pbkdf2(t_des *des, uint64_t salt);
 

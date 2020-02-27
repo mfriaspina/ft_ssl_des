@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/23 12:42:44 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/18 08:53:10 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/26 13:34:55 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ void		print_out(char *out, t_flag *flags)
 		fd = open(flags->out, O_CREAT);
 		fd = open(flags->out, O_WRONLY);
 	}
-	ft_putendl_fd(out, fd);
+	if (out[ft_strlen(out) - 1] == '\n')
+		ft_putstr_fd(out, fd);
+	else
+		ft_putendl_fd(out, fd);
 	if (fd != 1)
 		close(fd);
 }
@@ -61,10 +64,10 @@ void		base64(t_flag *flags)
 		ft_printf("ft_ssl: base64: %s: No such file or directory\n", flags->in);
 		return ;
 	}
-	line = read_file(fd);
+	get_next_line(fd, &line);
 	close(fd);
 	if (flags->d && !flags->e)
-		out = decode(remove_whitespaces(line), ft_strlen(line) - 1, 0);
+		out = decode(remove_whitespaces(line), ft_strlen(line));
 	else
 		out = encode(line, ft_strlen(line));
 	print_out(out, flags);

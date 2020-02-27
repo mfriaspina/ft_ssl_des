@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 14:13:34 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/11 11:52:51 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/26 13:37:45 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,7 @@ static const char	g_b64_table[] = {
 	't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
 	'8', '9', '+', '/'};
 
-static const int	g_b64_d[] = {
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 63, 62, 62, 63,
-	52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4,
-	5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
-	25, 0, 0, 0, 0, 63, 0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-	39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51};
-
-void	octet_to_sextet(char *data, size_t *i, size_t len, char *out)
+void		octet_to_sextet(char *data, size_t *i, size_t len, char *out)
 {
 	uint32_t	octet[3];
 	uint32_t	triple;
@@ -45,22 +37,7 @@ void	octet_to_sextet(char *data, size_t *i, size_t len, char *out)
 	out[out_len] = '\0';
 }
 
-void	sextet_to_octet(char *p, size_t *i, char *out)
-{
-	int	n;
-	int	j;
-
-	n = g_b64_d[(int)p[*i]] << 18 | g_b64_d[(int)p[*i + 1]] << 12 |
-		g_b64_d[(int)p[*i + 2]] << 6 | g_b64_d[(int)p[*i + 3]];
-	j = ft_strlen(out);
-	out[j++] = n >> 16;
-	out[j++] = n >> 8 & 0xFF;
-	out[j++] = n & 0xFF;
-	out[j] = '\0';
-	*i += 4;
-}
-
-char	*encode(char *line, size_t in_len)
+char		*encode(char *line, size_t in_len)
 {
 	char	*out;
 	size_t	i;
@@ -79,30 +56,44 @@ char	*encode(char *line, size_t in_len)
 	return (out);
 }
 
-char	*decode(char *line, size_t len, size_t i)
+static int	*get_decrypt_table(char *input, size_t in_len, size_t *o_len)
 {
-	char	*out;
-	int		pad;
-	int		n;
-	size_t	l;
+	static int	table[256];
+	char		*t;
+	int			count;
 
-	pad = len > 0 && (len % 4 || line[len - 1] == '=');
-	l = ((len + 3) / 4 - pad) * 4;
-	out = ft_strnew(l / 4 * 3 + pad);
-	i = 0;
-	while (i < l)
-		sextet_to_octet(line, &i, out);
-	if (pad)
+	t = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	count = -1;
+	while (++count < 64)
+		table[(int)t[count]] = count;
+	*o_len = 3 * (in_len / 4);
+	*o_len -= input[in_len - 1] == '=' ? 1 : 0;
+	*o_len -= input[in_len - 2] == '=' ? 1 : 0;
+	return (table);
+}
+
+char		*decode(char *input, size_t in_len)
+{
+	t_base64	b;
+	char		*output;
+	int			*t;
+	size_t		o_len;
+
+	if (!(t = get_decrypt_table(input, in_len, &o_len)))
+		return (NULL);
+	if (!(output = ft_strnew(o_len)))
+		return (NULL);
+	b.i = 0;
+	b.j = -1;
+	while (b.i < in_len && (b.k = -1))
 	{
-		n = g_b64_d[(int)line[l]] << 18 | g_b64_d[(int)line[l + 1]] << 12;
-		out[ft_strlen(out) - 1] = n >> 16;
-		if (len > l + 2 && line[l + 2] != '=')
-		{
-			n |= g_b64_d[(int)line[l + 2]] << 6;
-			i = ft_strlen(out);
-			out[i] = n >> 8 & 0xFF;
-			out[i + 1] = '\0';
-		}
+		b.res_a = input[b.i] != '=' ? t[(int)input[b.i++]] : 0 & ++b.i;
+		b.res_b = input[b.i] != '=' ? t[(int)input[b.i++]] : 0 & ++b.i;
+		b.res_c = input[b.i] != '=' ? t[(int)input[b.i++]] : 0 & ++b.i;
+		b.res_d = input[b.i] != '=' ? t[(int)input[b.i++]] : 0 & ++b.i;
+		b.res_e = (b.res_a << 18) + (b.res_b << 12) + (b.res_c << 6) + b.res_d;
+		while (++b.k < 3 && ++b.j < o_len)
+			output[b.j] = (char)((b.res_e >> (16 - (8 * b.k))) & 0xFF);
 	}
-	return (out);
+	return (output);
 }
