@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 14:13:34 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/26 13:37:45 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/27 11:47:51 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static const char	g_b64_table[] = {
 	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
 	'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
-	'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'm', 'o', 'p', 'q', 'r', 's',
+	'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
 	't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
 	'8', '9', '+', '/'};
 
@@ -37,7 +37,7 @@ void		octet_to_sextet(char *data, size_t *i, size_t len, char *out)
 	out[out_len] = '\0';
 }
 
-char		*encode(char *line, size_t in_len)
+char		*encode(char *input, size_t in_len)
 {
 	char	*out;
 	size_t	i;
@@ -45,7 +45,7 @@ char		*encode(char *line, size_t in_len)
 	out = ft_strnew(4 * ((in_len) / 3));
 	i = 0;
 	while (i < in_len)
-		octet_to_sextet(line, &i, in_len, out);
+		octet_to_sextet(input, &i, in_len, out);
 	if (in_len % 3 == 1)
 	{
 		out[ft_strlen(out) - 1] = '=';

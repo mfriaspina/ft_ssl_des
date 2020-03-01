@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   des_crypt.c                                        :+:      :+:    :+:   */
+/*   pbkdf.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/21 12:19:32 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/24 13:03:21 by mfrias           ###   ########.fr       */
+/*   Created: 2020/02/27 17:30:13 by mfrias            #+#    #+#             */
+/*   Updated: 2020/02/27 17:30:26 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@ void	pbkdf2(t_des *des, uint64_t salt)
 	output = ft_strnew(16);
 	ft_memcpy(output, input, 16);
 	if (!(des->iv))
-	{
-		des->iv = ft_strnew(16);
-		ft_memcpy(des->iv, &input[16], 16);
-	}
+		des->iv = char_to_ubyte(&input[16]);
 	key = char_to_ubyte(output);
 	free(output);
 	free(input);

@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/15 13:40:24 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/24 13:31:26 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/28 16:35:34 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,24 +65,66 @@ void		process_message(const t_ubyte *message, t_subkey ks, t_ubyte *ep)
 		poke_bit(ep, i, peek_bit(des.e, g_ip2[i] - 1));
 }
 
-t_string	des_encrypt(t_ubyte *key, t_ubyte *message, int len)
+void		decrypt_cycle(t_subkey ks, int i)
+{
+	int			j;
+	t_ubyte		temp;
+
+	j = -1;
+	while (++j < 6)
+	{
+		temp = ks[i][j];
+		ks[i][j] = ks[17 - i][j];
+		ks[17 - i][j] = temp;
+	}
+}
+
+t_string	des_decrypt(t_des *des, t_ubyte *message, int len)
 {
 	t_string	result;
-	t_subkey	ks;
+	int			i;
+	t_ubyte		pad_byte;
+
+	result = (t_string){0, 0};
+	get_sub_keys(des->key, des->ks);
+	i = 0;
+	while (++i < 9)
+		decrypt_cycle(des->ks, i);
+	result.data = (t_ubyte *)ft_memalloc(len);
+	ft_memcpy(result.data, message, len);
+	result.len = len;
+	i = 0;
+	while (i < result.len)
+	{
+		cbc_dec(des, &result.data[i]);
+		process_message(&result.data[i], des->ks, &result.data[i]);
+		process_cbc_dec(des, &result.data[i]);
+		i += 8;
+	}
+	pad_byte = result.data[len - 1];
+	result.len -= pad_byte;
+	return (result);
+}
+
+t_string	des_encrypt(t_des *des, t_ubyte *message, int len)
+{
+	t_string	result;
 	t_ubyte		pad_byte;
 	int			i;
 
 	result = (t_string){0, 0};
-	get_sub_keys(key, ks);
+	get_sub_keys(des->key, des->ks);
 	pad_byte = 8 - len % 8;
 	result.len = len + pad_byte;
-	result.data = (t_ubyte *)ft_memalloc(result.len);
+	result.data = (t_ubyte *)ft_strnew(result.len);
 	ft_memcpy(result.data, message, len);
 	ft_memset(&result.data[len], pad_byte, pad_byte);
 	i = 0;
 	while (i < result.len)
 	{
-		process_message(&result.data[i], ks, &result.data[i]);
+		process_cbc(des, &result.data[i]);
+		process_message(&result.data[i], des->ks, &result.data[i]);
+		ft_memcpy(des->iv, &result.data[i], 8);
 		i += 8;
 	}
 	return (result);

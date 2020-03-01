@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:26:37 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/26 17:45:23 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/28 16:36:02 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,12 @@ typedef t_ubyte			t_subkey[17][6];
 typedef struct			s_des
 {
 	t_ubyte				*key;
+	t_subkey			ks;
 	char				*salt;
-	char				*iv;
+	t_ubyte				*iv;
+	t_ubyte				*temp;
 	char				*str;
-	int					len;
+	int					mode;
 }						t_des;
 
 typedef struct			s_des_algo
@@ -105,7 +107,7 @@ void					get_val(uint32_t *o, uint32_t *val);
 uint32_t				*get_w(uint32_t *msg, int i);
 uint32_t				sha_rev(uint32_t n);
 
-char					*encode(char *line, size_t in_len);
+char					*encode(char *input, size_t in_len);
 char					*decode(char *input, size_t in_len);
 void					base64(t_flag *flags);
 
@@ -132,11 +134,15 @@ void					pbkdf2(t_des *des, uint64_t salt);
 
 uint64_t				hex_str_to_64bit_le(char *s);
 char					*get_salt(t_flag *flags);
-char					*get_iv(t_flag *flags);
+t_ubyte					*get_iv(t_flag *flags);
 
-t_string				des_encrypt(t_ubyte *key, t_ubyte *message, int len);
-t_string				des_decrypt(t_ubyte *key, t_ubyte *message, int len);
+void					process_cbc(t_des *des, t_ubyte *str);
+void					process_cbc_dec(t_des *des, t_ubyte *str);
+void					cbc_dec(t_des *des, t_ubyte *str);
+t_string				des_encrypt(t_des *des, t_ubyte *message, int len);
+t_string				des_decrypt(t_des *des, t_ubyte *message, int len);
 
 void					des(t_flag *flags);
+void					des_cbc(t_flag *flags);
 
 #endif

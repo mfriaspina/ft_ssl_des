@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 13:46:19 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/26 18:59:02 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/27 13:29:10 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,8 @@ t_des	*get_key(t_flag *flags, char *in)
 		ft_printf("salt=%s\n", des->salt);
 		print_bytes(des->key, 8, buffer);
 		ft_printf("key=%s\n", buffer);
-		ft_printf("iv=%s\n", des->iv);
+		print_bytes(des->iv, 8, buffer);
+		ft_printf("iv=%s\n", buffer);
 	}
 	ft_strdel(&des->str);
 	return (des);

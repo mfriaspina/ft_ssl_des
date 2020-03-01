@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 14:23:56 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/26 19:08:21 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/29 12:39:46 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 /*
 ** TODO
-** 2) Des-cbc
-** 3) Des
+** 1) Des large input
 */
 
 char		*enc_out(t_flag *flags, t_des *des, t_string *enc, int i)
@@ -97,7 +96,7 @@ char		*read_des(t_flag *flags)
 		in = temp;
 	}
 	else
-		in = read_file(fd);
+		get_next_line(fd, &in);
 	close(fd);
 	return (in);
 }
@@ -113,10 +112,36 @@ void		des(t_flag *flags)
 	des = get_key(flags, in);
 	if (flags->d && !flags->k)
 		in += 16;
+	des->mode = 0;
 	if (flags->d && !flags->e)
-		enc = des_decrypt(des->key, (t_ubyte *)in, ft_strlen(in));
+		enc = des_decrypt(des, (t_ubyte *)in, ft_strlen(in));
 	else
-		enc = des_encrypt(des->key, (t_ubyte *)in, ft_strlen(in));
+		enc = des_encrypt(des, (t_ubyte *)in, ft_strlen(in));
+	print_des(flags, des, enc);
+	if (flags->d && !flags->k)
+		in -= 16;
+	free(in);
+	check_free(des);
+}
+
+void		des_cbc(t_flag *flags)
+{
+	char		*in;
+	t_des		*des;
+	t_string	enc;
+
+	if (!(in = read_des(flags)))
+		return ;
+	des = get_key(flags, in);
+	if (!(des->iv))
+		free_exit("iv undefined\n", des);
+	if (flags->d && !flags->k)
+		in += 16;
+	des->mode = 1;
+	if (flags->d && !flags->e)
+		enc = des_decrypt(des, (t_ubyte *)in, ft_strlen(in));
+	else
+		enc = des_encrypt(des, (t_ubyte *)in, ft_strlen(in));
 	print_des(flags, des, enc);
 	if (flags->d && !flags->k)
 		in -= 16;

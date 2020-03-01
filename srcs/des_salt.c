@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 15:19:55 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/25 13:47:07 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/02/27 13:26:08 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,12 @@ char		*get_salt(t_flag *flags)
 	return (salt);
 }
 
-char		*get_iv(t_flag *flags)
+t_ubyte		*get_iv(t_flag *flags)
 {
 	char	*salt;
+	t_ubyte	*iv;
 
+	iv = NULL;
 	salt = NULL;
 	if (flags->v)
 	{
@@ -96,5 +98,10 @@ char		*get_iv(t_flag *flags)
 		while (ft_strlen(salt) < 16)
 			salt = free_strjoin(salt, "0", 0);
 	}
-	return (salt);
+	if (salt)
+	{
+		iv = char_to_ubyte(salt);
+		free(salt);
+	}
+	return (iv);
 }
