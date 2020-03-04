@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 15:45:04 by mfrias            #+#    #+#             */
-/*   Updated: 2019/10/18 15:45:20 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/03/02 15:51:13 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*file(t_fun fun, t_flag *flags, char **argv)
 	fd = open(argv[0], O_RDONLY);
 	if (fd >= 0)
 	{
-		str = read_file(fd);
+		str = read_file(fd, NULL);
 		if (!flags->r && !flags->q)
 			ft_printf("%s (%s) = ", fun.name, argv[0]);
 	}
@@ -49,7 +49,7 @@ char	*pre(t_fun fun, t_flag *flags, char **argv)
 
 	if (flags->p)
 	{
-		str = read_file(0);
+		str = read_file(0, NULL);
 		ft_putstr(str);
 		flags->t = 1;
 	}
@@ -65,7 +65,7 @@ char	*pre(t_fun fun, t_flag *flags, char **argv)
 		str = file(fun, flags, argv);
 	else
 	{
-		str = read_file(0);
+		str = read_file(0, NULL);
 		flags->t = 1;
 	}
 	return (str);

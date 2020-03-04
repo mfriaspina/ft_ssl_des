@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/15 13:40:24 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/28 16:35:34 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/03/03 13:51:01 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ t_string	des_encrypt(t_des *des, t_ubyte *message, int len)
 	get_sub_keys(des->key, des->ks);
 	pad_byte = 8 - len % 8;
 	result.len = len + pad_byte;
-	result.data = (t_ubyte *)ft_strnew(result.len);
+	result.data = (t_ubyte *)ft_memalloc(result.len);
 	ft_memcpy(result.data, message, len);
 	ft_memset(&result.data[len], pad_byte, pad_byte);
 	i = 0;
@@ -124,7 +124,8 @@ t_string	des_encrypt(t_des *des, t_ubyte *message, int len)
 	{
 		process_cbc(des, &result.data[i]);
 		process_message(&result.data[i], des->ks, &result.data[i]);
-		ft_memcpy(des->iv, &result.data[i], 8);
+		if (des->iv && des->mode)
+			ft_memcpy(des->iv, &result.data[i], 8);
 		i += 8;
 	}
 	return (result);

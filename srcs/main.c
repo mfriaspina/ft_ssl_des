@@ -6,25 +6,28 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:27:28 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/26 19:43:28 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/03/04 11:55:03 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-char	*read_file(int fd)
+char	*read_file(int fd, int *len)
 {
 	char	c[2];
 	char	*str;
+	int		size;
 	char	*tmp;
 
 	c[1] = 0;
 	str = ft_strdup("");
-	while (read(fd, c, 1))
+	while ((size = read(fd, c, 1)))
 	{
 		tmp = str;
 		str = ft_strjoin(str, c);
 		free(tmp);
+		if (len)
+			*len += size;
 	}
 	return (str);
 }
@@ -34,7 +37,7 @@ void	invalid_cmd(int argc, char *cmd)
 	if (argc < 2)
 	{
 		ft_putendl("usage: ft_ssl command [command opts] [command args]");
-		exit(0);
+		exit(EXIT_FAILURE);
 	}
 	else if (ft_strcmp(cmd, "md5") && ft_strcmp(cmd, "sha256") &&
 	ft_strcmp(cmd, "base64") && ft_strcmp(cmd, "des") &&
@@ -46,7 +49,7 @@ void	invalid_cmd(int argc, char *cmd)
 		ft_printf("md5\nsha256\n\n");
 		ft_putendl("Cipher commands:");
 		ft_printf("base64\ndes\ndes-ecb\ndes-cbc\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 }
 

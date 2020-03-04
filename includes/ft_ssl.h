@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/24 13:26:37 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/28 16:36:02 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/03/03 13:49:07 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int						xor(int x, int c);
 
 t_flag					get_flags(char **argv, int *i);
 void					flag_error(char *name, char *flags);
-char					*read_file(int fd);
+char					*read_file(int fd, int *len);
 
 void					md5(char *old_msg, size_t initial_len);
 char					*execute_md5(char *old_msg, size_t initial_len,

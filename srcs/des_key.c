@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 13:46:19 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/27 13:29:10 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/03/03 14:32:22 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	pass_salted_key(t_flag *flags, t_des *des, char *in)
 		free_exit("bad magic number\n", des);
 	}
 	free(des->salt);
-	des->salt = ft_strnew(9);
+	des->salt = ft_strnew(8);
 	print_bytes((t_ubyte *)&in[8], 8, des->salt);
 	if (flags->pass)
 		des->str = ft_strdup(flags->pass);
@@ -119,6 +119,7 @@ t_des	*get_key(t_flag *flags, char *in)
 		pass_salted_key(flags, des, in);
 	else
 		salted_key(flags, des);
+	des->salt[16] = '\0';
 	if (flags->print)
 	{
 		ft_printf("salt=%s\n", des->salt);

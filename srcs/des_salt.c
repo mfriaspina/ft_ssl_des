@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 15:19:55 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/27 13:26:08 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/03/03 14:26:44 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,6 @@ t_ubyte		*get_iv(t_flag *flags)
 			salt[16] = '\0';
 		while (ft_strlen(salt) < 16)
 			salt = free_strjoin(salt, "0", 0);
-	}
-	if (salt)
-	{
 		iv = char_to_ubyte(salt);
 		free(salt);
 	}

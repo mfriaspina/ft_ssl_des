@@ -6,7 +6,7 @@
 /*   By: mfrias <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/14 14:23:56 by mfrias            #+#    #+#             */
-/*   Updated: 2020/02/29 12:39:46 by mfrias           ###   ########.fr       */
+/*   Updated: 2020/03/04 12:06:16 by mfrias           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** 1) Des large input
 */
 
-char		*enc_out(t_flag *flags, t_des *des, t_string *enc, int i)
+char		*enc_out(t_flag *flags, t_des *des, t_string *enc)
 {
 	char		*str;
 	char		*salted;
@@ -34,13 +34,6 @@ char		*enc_out(t_flag *flags, t_des *des, t_string *enc, int i)
 		free(str);
 		enc->len += 16;
 		return (salted);
-	}
-	if (flags->d && flags->a)
-	{
-		while (str[++i])
-			if (str[i] == '\n')
-				str[i + 1] = '\0';
-		enc->len = i;
 	}
 	return (str);
 }
@@ -59,7 +52,7 @@ void		print_des(t_flag *flags, t_des *des, t_string enc)
 		fd = open(flags->out, O_CREAT);
 		fd = open(flags->out, O_WRONLY);
 	}
-	str = enc_out(flags, des, &enc, -1);
+	str = enc_out(flags, des, &enc);
 	if (flags->a && !flags->d)
 	{
 		out = encode(str, enc.len);
@@ -74,13 +67,14 @@ void		print_des(t_flag *flags, t_des *des, t_string enc)
 	free(str);
 }
 
-char		*read_des(t_flag *flags)
+char		*read_des(t_flag *flags, int *len)
 {
 	char		*in;
 	char		*temp;
 	int			fd;
 
 	fd = 0;
+	*len = 0;
 	if (flags->in)
 		fd = open(flags->in, O_RDONLY);
 	if (fd < 0)
@@ -90,14 +84,15 @@ char		*read_des(t_flag *flags)
 	}
 	if (flags->a && flags->d)
 	{
-		get_next_line(fd, &in);
+		in = read_file(fd, len);
 		temp = decode(in, ft_strlen(in));
 		free(in);
 		in = temp;
 	}
 	else
-		get_next_line(fd, &in);
+		in = read_file(fd, len);
 	close(fd);
+	*len = flags->d && !flags->k ? *len - 16 : *len;
 	return (in);
 }
 
@@ -106,17 +101,18 @@ void		des(t_flag *flags)
 	char		*in;
 	t_des		*des;
 	t_string	enc;
+	int			len;
 
-	if (!(in = read_des(flags)))
+	if (!(in = read_des(flags, &len)))
 		return ;
 	des = get_key(flags, in);
 	if (flags->d && !flags->k)
 		in += 16;
 	des->mode = 0;
 	if (flags->d && !flags->e)
-		enc = des_decrypt(des, (t_ubyte *)in, ft_strlen(in));
+		enc = des_decrypt(des, (t_ubyte *)in, len);
 	else
-		enc = des_encrypt(des, (t_ubyte *)in, ft_strlen(in));
+		enc = des_encrypt(des, (t_ubyte *)in, len);
 	print_des(flags, des, enc);
 	if (flags->d && !flags->k)
 		in -= 16;
@@ -129,8 +125,9 @@ void		des_cbc(t_flag *flags)
 	char		*in;
 	t_des		*des;
 	t_string	enc;
+	int			len;
 
-	if (!(in = read_des(flags)))
+	if (!(in = read_des(flags, &len)))
 		return ;
 	des = get_key(flags, in);
 	if (!(des->iv))
@@ -139,9 +136,9 @@ void		des_cbc(t_flag *flags)
 		in += 16;
 	des->mode = 1;
 	if (flags->d && !flags->e)
-		enc = des_decrypt(des, (t_ubyte *)in, ft_strlen(in));
+		enc = des_decrypt(des, (t_ubyte *)in, len);
 	else
-		enc = des_encrypt(des, (t_ubyte *)in, ft_strlen(in));
+		enc = des_encrypt(des, (t_ubyte *)in, len);
 	print_des(flags, des, enc);
 	if (flags->d && !flags->k)
 		in -= 16;
